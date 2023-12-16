@@ -46,3 +46,29 @@ app.get("/users/:userId", (req: Request, res: Response) => {
     }
     res.status(200).json({usuario: `${user.userId} - ${user.firstName} ${user.lastName} - consulta concluída com sucesso`});
 });
+
+// Função para obter o próximo userId
+const getNextUserId = () => {
+    const maxUserId = users.reduce((max, user) => (user.userId > max ? user.userId : max), 0);
+    return maxUserId + 1;
+};
+
+// Rota para adicionar um novo usuário
+app.post("/users", (req: Request, res: Response) => {
+    const existingUser = users.find(user => 
+        user.firstName === req.body.firstName && user.lastName === req.body.lastName
+    );
+
+    if (existingUser) {
+        return res.status(400).json({ mensagem: "Operação não realizada. Usuário já está cadastrado" });
+    }
+
+    const newUser = {
+        userId: getNextUserId(),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+    };
+
+    users.push(newUser);
+    res.status(201).json({ mensagem: `${newUser.userId} - ${newUser.firstName} - ${newUser.lastName} - usuário cadastrado com sucesso` });
+});
