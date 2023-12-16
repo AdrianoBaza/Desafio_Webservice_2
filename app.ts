@@ -83,3 +83,18 @@ app.get("/users/greet/:firstName", (req: Request, res: Response) => {
         return res.status(404).json({ mensagem: "Usuário não encontrado" });
     };
 });
+
+//Rota para editar um usuário pelo id
+app.put("/users/:userId", (req: Request, res: Response) => {
+    const userIndex = users.findIndex((l) => l.userId === parseInt(req.params.userId));
+  
+    if (userIndex === -1) {
+      return res.status(404).json({ mensagem: "Operação não realizada. Usuário não encontrado" });
+    }
+    users[userIndex] = {
+      userId: users[userIndex].userId,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    };
+    res.status(201).json({ mensagem: `${users[userIndex].userId} - ${users[userIndex].firstName} - ${users[userIndex].lastName} - cadastro atualizado com sucesso`});
+  });
