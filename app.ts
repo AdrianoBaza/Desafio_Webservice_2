@@ -98,3 +98,18 @@ app.put("/users/:userId", (req: Request, res: Response) => {
     };
     res.status(201).json({ mensagem: `${users[userIndex].userId} - ${users[userIndex].firstName} - ${users[userIndex].lastName} - cadastro atualizado com sucesso`});
   });
+
+// Rota para deletar um usuário pelo id
+app.delete("/users/:userId", (req: Request, res: Response) => {
+    const userIdToDelete = parseInt(req.params.userId);
+    
+    const userIndex = users.findIndex((user) => user.userId === userIdToDelete);
+
+    if (userIndex === -1) {
+        return res.status(404).json({ mensagem: "Operação não realizada. Usuário não encontrado" });
+    }
+
+    const deletedUser = users.splice(userIndex, 1)[0]; // Remova e capture o usuário removido
+
+    res.json({ mensagem: `${deletedUser.userId} - ${deletedUser.firstName} - ${deletedUser.lastName} - Usuário removido com sucesso` });
+});
