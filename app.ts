@@ -72,3 +72,14 @@ app.post("/users", (req: Request, res: Response) => {
     users.push(newUser);
     res.status(201).json({ mensagem: `${newUser.userId} - ${newUser.firstName} - ${newUser.lastName} - usuário cadastrado com sucesso` });
 });
+
+// Rota para saudação personalizada ao usuário com entrada do parâmetro nome
+app.get("/users/greet/:firstName", (req: Request, res: Response) => {
+    const user = users.find((l) => l.firstName === (req.params.firstName));  
+    for (let i: number = 0; i <= users.length; i++) {
+        if (user) {
+            res.status(200).json({ Saudação: `Olá, ${user.firstName}! Bem-vindo ao nosso serviço.` });
+        };
+        return res.status(404).json({ mensagem: "Usuário não encontrado" });
+    };
+});
